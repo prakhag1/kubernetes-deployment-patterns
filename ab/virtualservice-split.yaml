@@ -12,19 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apps/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: app-02
+  name: app
 spec:
-  template:
-    metadata:
-       labels:
-         app: app
-         version: "02"
-    spec:
-      containers:
-        - name: app
-          image: gcr.io/$PROJECT/app:new
-          ports:
-            - containerPort: 8080
+  selector:
+    app: app
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: app
+spec:
+  gateways:
+    - app
+  hosts:
+    - "*"
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: dummyUser
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: app
+        subset: v2
+  - route:
+    - destination:
+        port:
+          number: 8080
+        host: app
+        subset: v1
