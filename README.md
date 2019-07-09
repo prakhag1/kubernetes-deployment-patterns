@@ -13,7 +13,7 @@ export PROJECT=$(gcloud config get-value project)
 ```
 Create a GKE cluster with Istio enabled:
 ```
-gcloud container clusters create "test-cluster" \
+gcloud beta container clusters create "test-cluster" \
    --zone "us-central1-a" \
    --scopes "https://www.googleapis.com/auth/cloud-platform" \
    --addons HorizontalPodAutoscaling, HttpLoadBalancing, Istio \
@@ -57,6 +57,10 @@ while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBal
 envsubst < recreate/deployment-new.yaml | kubectl apply -f -
 ```
 Monitor the response changing on the terminal where curl command was executed.
+5. Cleanup:
+```
+kubectl delete -f recreate/
+```
 
 ## Rolling Update
 1. Create deployment with the current version of the application:
@@ -76,6 +80,10 @@ while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBal
 envsubst < rollingupdate/deployment-new.yaml | kubectl apply -f -
 ```
 Monitor the response changing on the terminal where curl command was executed.
+5. Cleanup:
+```
+kubectl delete -f rollingupdate/
+```
 
 ## Blue/Green
 1. Create deployment with the current version of the application:
@@ -99,6 +107,10 @@ envsubst < bluegreen/deployment-new.yaml | kubectl apply -f -
 kubectl apply -f bluegreen/service-new.yaml
 ```
 Monitor the response changing on the terminal where curl command was executed.
+6. Cleanup:
+```
+kubectl delete -f bluegreen/
+```
 
 ## Canary
 1. Create deployment with the current version of the application:
@@ -122,6 +134,10 @@ envsubst < canary/deployment-new.yaml | kubectl apply -f -
 kubectl apply -f canary/destinationrule.yaml -f canary/virtualservice-split.yaml
 ```
 Monitor the response changing on the terminal where curl command was executed.
+6. Cleanup:
+```
+kubectl delete -f canary/
+```
 
 ## Shadow
 1. Create deployment with the current version of the application:
@@ -149,6 +165,10 @@ kubectl apply -f shadow/virtualservice-mirror.yaml
 kubectl logs -f --tail=3 deployment/app-01
 kubectl logs -f --tail=3 deployment/app-02
 ```
+7. Cleanup:
+```
+kubectl delete -f shadow/
+```
 
 ## A/B Testing
 1. Create deployment with the current version of the application:
@@ -174,4 +194,8 @@ kubectl apply -f ab/destinationrule.yaml -f ab/virtualservice-split.yaml
 6. Send request with end-user as "dummyUser":
 ```
 curl -H "end-user:dummyUser" "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"
+```
+7. Cleanup:
+```
+kubectl delete -f ab/
 ```
