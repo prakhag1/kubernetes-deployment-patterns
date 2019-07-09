@@ -57,6 +57,7 @@ while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBal
 envsubst < recreate/deployment-new.yaml | kubectl apply -f -
 ```
 Monitor the response changing on the terminal where curl command was executed.
+
 5. Cleanup:
 ```
 kubectl delete -f recreate/
@@ -80,6 +81,7 @@ while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBal
 envsubst < rollingupdate/deployment-new.yaml | kubectl apply -f -
 ```
 Monitor the response changing on the terminal where curl command was executed.
+
 5. Cleanup:
 ```
 kubectl delete -f rollingupdate/
@@ -107,6 +109,7 @@ envsubst < bluegreen/deployment-new.yaml | kubectl apply -f -
 kubectl apply -f bluegreen/service-new.yaml
 ```
 Monitor the response changing on the terminal where curl command was executed.
+
 6. Cleanup:
 ```
 kubectl delete -f bluegreen/
@@ -134,6 +137,7 @@ envsubst < canary/deployment-new.yaml | kubectl apply -f -
 kubectl apply -f canary/destinationrule.yaml -f canary/virtualservice-split.yaml
 ```
 Monitor the response changing on the terminal where curl command was executed.
+
 6. Cleanup:
 ```
 kubectl delete -f canary/
