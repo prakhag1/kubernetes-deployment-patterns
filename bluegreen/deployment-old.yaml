@@ -1,0 +1,16 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: app-01
+spec:
+  template:
+    metadata:
+       labels:
+         app: app
+         version: "01"
+    spec:
+      containers:
+        - name: app
+          image: gcr.io/$PROJECT/app:current
+          ports:
+            - containerPort: 8080
