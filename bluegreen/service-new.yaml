@@ -18,8 +18,7 @@ metadata:
   name: app
 spec:
   selector:
-    app: app
-    version: "02"
+    app: demo-app-v2
   ports:
     - port: 8080
       targetPort: 8080

@@ -60,7 +60,7 @@ Monitor the response changing on the terminal where curl command was executed.
 
 5. Cleanup:
 ```
-kubectl delete -f recreate/
+kubectl delete -f recreate/ --ignore-not-found
 ```
 
 ## Rolling Update
@@ -84,7 +84,7 @@ Monitor the response changing on the terminal where curl command was executed.
 
 5. Cleanup:
 ```
-kubectl delete -f rollingupdate/
+kubectl delete -f rollingupdate/ --ignore-not-found
 ```
 
 ## Blue/Green
@@ -112,7 +112,7 @@ Monitor the response changing on the terminal where curl command was executed.
 
 6. Cleanup:
 ```
-kubectl delete -f bluegreen/
+kubectl delete -f bluegreen/ --ignore-not-found
 ```
 
 ## Canary
@@ -140,7 +140,7 @@ Monitor the response changing on the terminal where curl command was executed.
 
 6. Cleanup:
 ```
-kubectl delete -f canary/
+kubectl delete -f canary/ --ignore-not-found
 ```
 
 ## Shadow
@@ -171,7 +171,7 @@ kubectl logs -f --tail=3 deployment/app-02
 ```
 7. Cleanup:
 ```
-kubectl delete -f shadow/
+kubectl delete -f shadow/ --ignore-not-found
 ```
 
 ## A/B Testing
@@ -201,5 +201,5 @@ curl -H "end-user:dummyUser" "http://$(kubectl get service istio-ingressgateway 
 ```
 7. Cleanup:
 ```
-kubectl delete -f ab/
+kubectl delete -f ab/ --ignore-not-found
 ```
