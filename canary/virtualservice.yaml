@@ -29,11 +29,11 @@ kind: VirtualService
 metadata:
   name: app
 spec:
-  gateways:
-    - app
-  hosts:
-    - "*"
   http:
     - route:
         - destination:
             host: app
+  gateways:
+    - app
+  hosts:
+    - "*"
