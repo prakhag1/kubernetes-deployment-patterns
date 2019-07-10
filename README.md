@@ -16,7 +16,7 @@ Create a GKE cluster with Istio enabled:
 gcloud beta container clusters create "test-cluster" \
    --zone "us-central1-a" \
    --scopes "https://www.googleapis.com/auth/cloud-platform" \
-   --addons HorizontalPodAutoscaling, HttpLoadBalancing, Istio \
+   --addons HorizontalPodAutoscaling,HttpLoadBalancing,Istio \
    --istio-config auth=MTLS_PERMISSIVE
 ```
 Get running cluster credentials:
