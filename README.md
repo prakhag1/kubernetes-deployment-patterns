@@ -55,7 +55,10 @@ kubectl get svc/app -w
 ```
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
-while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
+while(true); \
+do \
+curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; \
+done
 ```
 5. Create deployment with the new version of the application and monitor the response changing on the terminal where curl command was executed.
 ```
@@ -82,7 +85,10 @@ kubectl get svc/app -w
 ```
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
-while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
+while(true); \
+do \
+curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; \
+done
 ```
 5. Create deployment with the new version of the application and monitor the response changing on the terminal where curl command was executed:
 ```
@@ -109,7 +115,10 @@ kubectl get svc/app -w
 ```
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
-while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
+while(true); \
+do \
+curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; \
+done
 ```
 5. Create deployment with the new version of the application:
 ```
@@ -137,14 +146,16 @@ envsubst < canary/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f canary/gateway.yaml -f canary/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
+3. Check if deployment created:
 ```
 kubectl rollout status deploy app-01 -w
-kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
 4. On a new terminal, get Istio ingress gateway IP and send requests:
 ```
-while(true); do curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; done
+while(true); \
+do \
+curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; \
+done
 ```
 5. Create deployment with the new version of the application:
 ```
@@ -172,14 +183,16 @@ envsubst < shadow/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f shadow/gateway.yaml -f shadow/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
+3. Check if deployment created successfully:
 ```
 kubectl rollout status deploy app-01 -w
-kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-01:8080/version
 ```
 4. On a new terminal, get Istio ingress gateway IP and send requests:
 ```
-while(true); do curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; done
+while(true); \
+do \
+curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; \
+done
 ```
 5. Create deployment with the new version of the application:
 ```
@@ -189,10 +202,9 @@ envsubst < shadow/deployment-new.yaml | kubectl apply -f -
 ```
 kubectl apply -f shadow/virtualservice-mirror.yaml
 ```
-7. Check if the new deployment and service created successfully. Wait for the service to return expected response ({"id":2,"content":"new"}) before proceeding:
+7. Check if the new deployment created successfully:
 ```
 kubectl rollout status deploy app-02 -w
-kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-02:8080/version
 ```
 8. Check pods logs:
 ```
@@ -213,10 +225,9 @@ envsubst < ab/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f ab/gateway.yaml -f ab/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
+3. Check if deployment created successfully:
 ```
 kubectl rollout status deploy app-01 -w
-kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
 4. Get Istio ingress gateway IP and send request:
 ```
