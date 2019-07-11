@@ -53,8 +53,7 @@ kubectl apply -f recreate/service.yaml
 kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
-Wait for successful deployment rollout and external IP to be allocated before proceeding. 
-
+Wait for external IP to be allocated before proceeding. 
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -86,8 +85,7 @@ kubectl apply -f rollingupdate/service.yaml
 kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
-Wait for successful deployment rollout and external IP to be allocated before proceeding.
-
+Wait for external IP to be allocated before proceeding.
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -119,8 +117,7 @@ kubectl apply -f bluegreen/service-old.yaml
 kubectl rollout status deploy app-01 -w
 kubectl get svc/app -w
 ```
-Wait for successful deployment rollout and external IP to be allocated before proceeding.
-
+Wait for external IP to be allocated before proceeding.
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -162,8 +159,6 @@ kubectl apply -f canary/gateway.yaml -f canary/virtualservice.yaml
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
-Wait for successful deployment rollout. 
-
 Wait for the service to return expected response({"id":1,"content":"current"}) before proceeding.
 
 4. On a new terminal, get Istio ingress gateway IP and send requests:
@@ -178,8 +173,6 @@ envsubst < canary/deployment-new.yaml | kubectl apply -f -
 ```
 kubectl rollout status deploy app-02 -w
 ```
-Wait for successful deployment rollout before proceeding.
-
 7. Enforce traffic split rules (80-20) between the two versions:
 ```
 kubectl apply -f canary/destinationrule.yaml -f canary/virtualservice-split.yaml
@@ -205,8 +198,6 @@ kubectl apply -f shadow/gateway.yaml -f shadow/virtualservice.yaml
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-01:8080/version
 ```
-Wait for successful deployment rollout.
-
 Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
 
 4. On a new terminal, get Istio ingress gateway IP and send requests:
@@ -252,8 +243,6 @@ kubectl apply -f ab/gateway.yaml -f ab/virtualservice.yaml
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
-Wait for successful deployment rollout and external IP to be allocated before proceeding.
-
 Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
 
 4. Get Istio ingress gateway IP and send request:
