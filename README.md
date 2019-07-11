@@ -48,24 +48,19 @@ envsubst < recreate/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f recreate/service.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for external IP to be allocated before proceeding. Press CTRL-C to end the watch loop:
 ```
 kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
-Wait for external IP to be allocated before proceeding. 
-Press CTRL-C to end the watch loop
-
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
 while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
 ```
-5. Create deployment with the new version of the application:
+5. Create deployment with the new version of the application and monitor the response changing on the terminal where curl command was executed.
 ```
 envsubst < recreate/deployment-new.yaml | kubectl apply -f -
 ```
-Monitor the response changing on the terminal where curl command was executed.
-
 6. Cleanup:
 ```
 kubectl delete -f recreate/ --ignore-not-found
@@ -80,24 +75,19 @@ envsubst < rollingupdate/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f rollingupdate/service.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for external IP to be allocated before proceeding. Press CTRL-C to end the watch loop:
 ```
 kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
-Wait for external IP to be allocated before proceeding.
-Press CTRL-C to end the watch loop
-
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
 while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
 ```
-5. Create deployment with the new version of the application:
+5. Create deployment with the new version of the application and monitor the response changing on the terminal where curl command was executed:
 ```
 envsubst < rollingupdate/deployment-new.yaml | kubectl apply -f -
 ```
-Monitor the response changing on the terminal where curl command was executed.
-
 6. Cleanup:
 ```
 kubectl delete -f rollingupdate/ --ignore-not-found
@@ -112,14 +102,11 @@ envsubst < bluegreen/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f bluegreen/service-old.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for external IP to be allocated before proceeding. Press CTRL-C to end the watch loop:
 ```
 kubectl rollout status deploy app-01 -w
 kubectl get svc/app -w
 ```
-Wait for external IP to be allocated before proceeding.
-Press CTRL-C to end the watch loop
-
 4. On a new terminal, get the service IP and send requests to the current deployment:
 ```
 while(true); do curl "http://$(kubectl get svc app -o jsonpath="{.status.loadBalancer.ingress[0].ip}"):8080/version"; echo; done
@@ -132,14 +119,10 @@ envsubst < bluegreen/deployment-new.yaml | kubectl apply -f -
 ```
 kubectl rollout status deploy app-02 -w
 ```
-Wait for successful deployment rollout before proceeding.
-
-7. Update the service to point to the new version:
+7. Update the service to point to the new version and monitor the response changing on the terminal where curl command was executed:
 ```
 kubectl apply -f bluegreen/service-new.yaml
 ```
-Monitor the response changing on the terminal where curl command was executed.
-
 8. Cleanup:
 ```
 kubectl delete -f bluegreen/ --ignore-not-found
@@ -154,13 +137,11 @@ envsubst < canary/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f canary/gateway.yaml -f canary/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
 ```
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
-Wait for the service to return expected response({"id":1,"content":"current"}) before proceeding.
-
 4. On a new terminal, get Istio ingress gateway IP and send requests:
 ```
 while(true); do curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; done
@@ -173,12 +154,10 @@ envsubst < canary/deployment-new.yaml | kubectl apply -f -
 ```
 kubectl rollout status deploy app-02 -w
 ```
-7. Enforce traffic split rules (80-20) between the two versions:
+7. Enforce traffic split rules (80-20) between the two versions and monitor the response changing on the terminal where curl command was executed:
 ```
 kubectl apply -f canary/destinationrule.yaml -f canary/virtualservice-split.yaml
 ```
-Monitor the response changing on the terminal where curl command was executed.
-
 8. Cleanup:
 ```
 kubectl delete -f canary/ --ignore-not-found
@@ -193,13 +172,11 @@ envsubst < shadow/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f shadow/gateway.yaml -f shadow/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
 ```
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-01:8080/version
 ```
-Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
-
 4. On a new terminal, get Istio ingress gateway IP and send requests:
 ```
 while(true); do curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"; echo; done
@@ -212,13 +189,11 @@ envsubst < shadow/deployment-new.yaml | kubectl apply -f -
 ```
 kubectl apply -f shadow/virtualservice-mirror.yaml
 ```
-7. Check if the new deployment and service created successfully:
+7. Check if the new deployment and service created successfully. Wait for the service to return expected response ({"id":2,"content":"new"}) before proceeding:
 ```
 kubectl rollout status deploy app-02 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-02:8080/version
 ```
-Wait for the service to return expected response ({"id":2,"content":"new"}) before proceeding.
-
 8. Check pods logs:
 ```
 kubectl logs -f --tail=3 deployment/app-01
@@ -238,13 +213,11 @@ envsubst < ab/deployment-old.yaml | kubectl apply -f -
 ```
 kubectl apply -f ab/gateway.yaml -f ab/virtualservice.yaml
 ```
-3. Check if deployment and service created successfully:
+3. Check if deployment and service created successfully. Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding:
 ```
 kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
-Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
-
 4. Get Istio ingress gateway IP and send request:
 ```
 curl "http://$(kubectl get service istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")/version"
