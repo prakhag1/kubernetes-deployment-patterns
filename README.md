@@ -54,6 +54,7 @@ kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
 Wait for successful deployment rollout and external IP to be allocated before proceeding. 
+
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -86,6 +87,7 @@ kubectl rollout status deploy app -w
 kubectl get svc/app -w
 ```
 Wait for successful deployment rollout and external IP to be allocated before proceeding.
+
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -118,6 +120,7 @@ kubectl rollout status deploy app-01 -w
 kubectl get svc/app -w
 ```
 Wait for successful deployment rollout and external IP to be allocated before proceeding.
+
 Press CTRL-C to end the watch loop
 
 4. On a new terminal, get the service IP and send requests to the current deployment:
@@ -133,7 +136,6 @@ envsubst < bluegreen/deployment-new.yaml | kubectl apply -f -
 kubectl rollout status deploy app-02 -w
 ```
 Wait for successful deployment rollout before proceeding.
-Press CTRL-C to end the watch loop
 
 7. Update the service to point to the new version:
 ```
@@ -161,6 +163,7 @@ kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
 Wait for successful deployment rollout. 
+
 Wait for the service to return expected response({"id":1,"content":"current"}) before proceeding.
 
 4. On a new terminal, get Istio ingress gateway IP and send requests:
@@ -203,6 +206,7 @@ kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app-01:8080/version
 ```
 Wait for successful deployment rollout.
+
 Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
 
 4. On a new terminal, get Istio ingress gateway IP and send requests:
@@ -249,6 +253,7 @@ kubectl rollout status deploy app-01 -w
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- wget -qO - app:8080/version
 ```
 Wait for successful deployment rollout and external IP to be allocated before proceeding.
+
 Wait for the service to return expected response ({"id":1,"content":"current"}) before proceeding.
 
 4. Get Istio ingress gateway IP and send request:
