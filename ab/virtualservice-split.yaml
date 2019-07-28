@@ -24,8 +24,8 @@ spec:
   http:
   - match:
     - headers:
-        end-user:
-          exact: dummyUser
+        cookie:
+          regex: "^(.*?;)?(user=test)(;.*)?$"
     route:
     - destination:
         port:
