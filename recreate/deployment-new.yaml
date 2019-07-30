@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: gcr.io/$PROJECT/app:new
+          image: gcr.io/cloud-solutions-images/app:new
           ports:
             - containerPort: 8080
 
